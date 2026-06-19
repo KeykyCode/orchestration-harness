@@ -1,12 +1,12 @@
 ---
-name: next-conventions
+name: ts-next
 description: Next.js(App Router) 프로젝트를 새로 만들거나 화면·기능을 추가할 때 사용. 서버/클라이언트 컴포넌트 구분·Server Actions·폴더구조·라우팅·셋업 컨벤션을 적용한다. SEO/공개 콘텐츠가 중요할 때 기본 선택. 인증·디자인·서버상태는 횡단 모듈에 위임한다.
 ---
 
 # Next.js (App Router) Conventions
 
 > 적용 전 함께 읽을 모듈: `supabase-auth`(인증·미들웨어), `design-system`(UI), 클라이언트 페칭이 필요하면 `tanstack-query`.
-> SEO가 불필요한 로그인 뒤 툴이라면 `vite-react-conventions`가 더 가벼울 수 있다(`setup` 참조).
+> SEO가 불필요한 로그인 뒤 툴이라면 `ts-vite-react`가 더 가벼울 수 있다(`setup` 참조).
 
 ## 셋업
 

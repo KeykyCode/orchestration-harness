@@ -1,12 +1,12 @@
 ---
-name: vite-react-conventions
+name: ts-vite-react
 description: Vite + React(SPA) 프로젝트를 새로 만들거나 화면·기능을 추가할 때 사용. 폴더구조·파일 라우팅(TanStack Router)·레이어·명명·셋업 컨벤션을 적용한다. SEO가 불필요한 로그인 뒤 대시보드/툴에 적합. 서버상태·인증·디자인은 횡단 모듈에 위임한다.
 ---
 
 # Vite + React (SPA) Conventions
 
 > 적용 전 함께 읽을 모듈: `tanstack-query`(서버상태), `api-client`(fetch), `design-system`(UI), `supabase-auth`(인증 시).
-> SEO가 필요하면 이 스택이 아니라 `next-conventions`를 검토하라(`setup`이 질문으로 안내).
+> SEO가 필요하면 이 스택이 아니라 `ts-next`를 검토하라(`setup`이 질문으로 안내).
 
 ## 셋업
 

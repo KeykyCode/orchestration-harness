@@ -54,11 +54,13 @@ skill-sets/
 
 ```
 /plan-features "기능"  → backlog
-/design-ui "화면"      → .tasks/design/
+/design-ui "화면"      → .tasks/design/  (UI 스택=와이어프레임·위젯트리 / FastAPI=엔드포인트·스키마 계약)
 /develop-task "[태그]" → 코드 (conventions 규칙대로)
-/test "대상"           → 테스트
+/test "대상"           → 테스트 (웹 Vitest / Flutter flutter_test / FastAPI pytest)
 /iterate               → 진척 분석 + 다음 액션
 ```
+
+> 워크플로우 5스킬은 **스택 중립** — 게이트·테스트 프레임워크·설계 산출물을 현 프로젝트 conventions에서 가져와 스택별로 분기한다(웹/Flutter/FastAPI).
 
 에이전트(`developer`·`ui-designer` 등)는 자연어 요청 시 자동 위임.
 

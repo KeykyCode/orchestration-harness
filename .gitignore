@@ -1,4 +1,4 @@
 
-# 조직 스킬 업로드용 빌드 산출물 (package.sh 로 재생성)
+# 조직 스킬 업로드용 빌드 산출물 (zip은 필요할 때 재생성)
 dist/project-setup/assets/
 dist/*.zip

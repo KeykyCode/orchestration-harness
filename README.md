@@ -7,18 +7,19 @@
 
 ```
 skill-sets/
-├── setup/                   ★ 질문 기반 조합 셋업 (create-react-app CLI처럼)
-│
-├── common/                  공통 — 항상 복사
-│   ├── design-system/       DESIGN.md(토큰·컴포넌트) + tokens.md(색값·중립) + 규칙
-│   └── workflow/            plan·design·develop·test·iterate 스킬 + agents 6 + .tasks 템플릿 (스택 중립)
-│
-├── modules/                 선택·조합 대상
-│   ├── vite-react-conventions/   Vite+React SPA 컨벤션
-│   ├── next-conventions/         Next App Router 컨벤션
-│   ├── supabase-auth/            서버사이드 인증·RLS
-│   ├── tanstack-query/           서버상태(쿼리키·useQuery/Mutation)
-│   └── api-client/               fetch 래퍼(인증·에러·401)
+├── v1-skill-setup/          ★ 모듈+조합 자산 (이 README가 속한 루트)
+│   ├── setup/               ★ 질문 기반 조합 셋업 (create-react-app CLI처럼)
+│   │
+│   ├── common/              공통 — 항상 복사
+│   │   ├── design-system/   DESIGN.md(토큰·컴포넌트) + tokens.md(색값·중립) + 규칙
+│   │   └── workflow/        plan·design·develop·test·iterate 스킬 + agents 6 + .tasks 템플릿 (스택 중립)
+│   │
+│   └── modules/             선택·조합 대상
+│       ├── vite-react-conventions/   Vite+React SPA 컨벤션
+│       ├── next-conventions/         Next App Router 컨벤션
+│       ├── supabase-auth/            서버사이드 인증·RLS
+│       ├── tanstack-query/           서버상태(쿼리키·useQuery/Mutation)
+│       └── api-client/               fetch 래퍼(인증·에러·401)
 │
 └── react-common-skills/     (레거시 보존)
 ```
@@ -51,6 +52,7 @@ skill-sets/
 /test "대상"           → 테스트
 /iterate               → 진척 분석 + 다음 액션
 ```
+
 에이전트(`developer`·`ui-designer` 등)는 자연어 요청 시 자동 위임.
 
 ## 원칙
@@ -59,3 +61,9 @@ skill-sets/
 - **작게 쪼개 조합.** 스택 디테일은 `modules/*-conventions`에, 횡단 관심사는 별도 모듈에, 공통은 `common/`에.
 - **살아있는 문서.** Claude가 매번 틀리는 지점을 발견하면 해당 모듈에 한 줄씩 추가한다.
 - **공용 마스터 불변.** 색·프로젝트별 값은 복사된 사본에서만 바꾼다.
+
+## 사용 방법
+
+- 다운받은 skill 경로를 확인 -> /Users/ravi/work_space/skill-sets/v1-skill-setup
+- 프로젝트를 시작하고자 하는 경로 확인 -> /Users/ravi/work_space/ai-make-service/
+- claude code 에 입력 /Users/ravi/work_space/ai-make-service/ 디렉토리에 /Users/ravi/work_space/skill-sets/v1-skill-setup/setup 스킬대로 {프로젝트명} 만들어줘

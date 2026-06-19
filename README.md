@@ -11,7 +11,7 @@ skill-sets/
 │   ├── setup/               ★ 질문 기반 조합 셋업 (create-react-app CLI처럼)
 │   │
 │   ├── common/              항상 복사 (진짜 스택 중립)
-│   │   └── workflow/        plan·design·develop·test·iterate 스킬 + agents 6 + .tasks 템플릿
+│   │   └── workflow/        plan·design·develop·test·iterate 스킬 + agents 7(+pm-orchestrator) + .tasks 템플릿
 │   │
 │   ├── stacks/              언어·프레임 종속 — 질문으로 1~2개 선택
 │   │   ├── flutter-app/         Flutter 앱 컨벤션 (Riverpod·자체 디자인토큰)
@@ -61,6 +61,8 @@ skill-sets/
 ```
 
 에이전트(`developer`·`ui-designer` 등)는 자연어 요청 시 자동 위임.
+
+**멀티파트 기능**(백+프론트+DB+검증이 한 턴에 얽힘)은 `pm-orchestrator` 에이전트가 지휘자로 붙는다 — 작업을 쪼개 역할 에이전트에 정밀 스펙으로 위임하고, **보고를 믿지 않고 conventions의 `## 검증` 게이트·런타임 E2E를 PM이 직접 재실행**한 뒤 `.tasks/in-progress.md`에 기록한다. 순차 조정이 기본, 대규모 독립 작업만 병렬 승격.
 
 ## 원칙
 

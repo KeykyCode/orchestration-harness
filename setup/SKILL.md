@@ -44,7 +44,7 @@ Q1. 앱 / 웹?
 
 ## 2. 모듈 매핑 (선택 → 복사 대상)
 
-**항상(common):** `common/workflow`(스킬 5 + agents 6) + `common/workflow/.tasks`
+**항상(common):** `common/workflow`(스킬 5 + agents 7, pm-orchestrator 포함) + `common/workflow/.tasks`
 
 | 선택 조합 | stacks | crosscutting |
 |---|---|---|

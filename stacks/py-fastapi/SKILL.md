@@ -19,7 +19,9 @@ uv run uvicorn app.main:app --reload  # 개발 서버
 ```
 
 - `app/core/config.py`에 `pydantic-settings`로 환경변수 로드. `.env`는 **gitignore** + `.env.example` 커밋(키는 사본에만).
-- CORS: 프론트(웹)에서 호출하면 `CORSMiddleware`에 허용 오리진 명시 — 와일드카드는 개발용만.
+- CORS: 프론트(웹)에서 호출하면 `CORSMiddleware`에 허용 오리진 명시 — 와일드카드는 개발용만. (프론트가 Next 프록시로 붙으면 같은 origin이라 CORS 불필요)
+- **비밀번호 해시는 bcrypt 직접 사용**: `passlib`은 bcrypt 4.x와 비호환(72바이트 `ValueError` 발생)이니 쓰지 마라. `import bcrypt` 후 `bcrypt.hashpw(pw.encode()[:72], bcrypt.gensalt())` / `bcrypt.checkpw(...)`. JWT는 `python-jose`.
+- 로컬 DB는 **Docker 독립 컨테이너로 격리**(포트 충돌 회피, `docker-compose.yml`). 다른 프로젝트 컨테이너에 테이블을 얹지 마라.
 
 ## 폴더 구조
 
@@ -49,10 +51,11 @@ core(config·security·deps) ─ 횡단
 - **schemas(DTO) ≠ models(ORM)**: 응답에 ORM 객체를 그대로 노출하지 말고 Pydantic 스키마로 변환(`from_attributes`).
 - **의존성 주입**: DB 세션·현재 사용자·설정은 `Depends`로 주입. 전역 import로 끌어오지 마라.
 
-## 비동기
+## 비동기 vs 동기
 
-- 라우터·service는 `async def` 기본. DB는 async 드라이버(`asyncpg`) + `AsyncSession`.
-- 블로킹 I/O(파일·동기 라이브러리)는 `run_in_threadpool`로 격리.
+- 기본 권장은 `async def` + async 드라이버(`asyncpg`) + `AsyncSession`. 블로킹 I/O는 `run_in_threadpool`로 격리.
+- **단, MVP·소규모거나 동기 드라이버(`psycopg`)로 충분하면 sync(`def` + `Session`)도 허용**한다. 레이어 규칙은 동일하게 지키고, 프로젝트 내에서 async/sync를 섞지 말 것.
+- DB 드라이버: async면 `asyncpg`, sync면 `psycopg`. 마이그레이션은 운영 시 Alembic, 초기 MVP는 `Base.metadata.create_all`로 시작해도 된다.
 
 ## 명명 규칙
 

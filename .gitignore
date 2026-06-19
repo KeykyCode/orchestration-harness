@@ -1,4 +1,4 @@
 
 # 조직 스킬 업로드용 빌드 산출물 (package.sh 로 재생성)
-dist/mapia-setup/assets/
+dist/project-setup/assets/
 dist/*.zip

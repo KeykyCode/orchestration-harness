@@ -67,3 +67,7 @@ skill-sets/
 - 다운받은 skill 경로를 확인 -> /Users/ravi/work_space/skill-sets/v1-skill-setup
 - 프로젝트를 시작하고자 하는 경로 확인 -> /Users/ravi/work_space/ai-make-service/
 - claude code 에 입력 /Users/ravi/work_space/ai-make-service/ 디렉토리에 /Users/ravi/work_space/skill-sets/v1-skill-setup/setup 스킬대로 {프로젝트명} 만들어줘
+
+- 아래처럼 질문이 나오면 정상
+<img width="998" height="869" alt="image" src="https://github.com/user-attachments/assets/2d542dfb-7727-4922-b7d0-07d4d5d4f191" />
+

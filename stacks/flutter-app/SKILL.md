@@ -63,6 +63,23 @@ services = 순수 로직 (어느 레이어서나 호출, 부수효과 X)
 - **`AppRadius`** / **`AppSpacing`** — radius·간격 상수. 매직넘버 금지.
 - 톤 변경은 `theme.dart`만 고치면 전체 반영. 새 색이 필요하면 ramp→시맨틱 순으로 추가.
 
+## 반응형 원칙 (모든 화면 기본 — 어기는 기존 화면도 점검·수정)
+
+기기(iOS/Android 기종)·글꼴 배율(textScale)·키보드 상태에 따라 화면이 깨지면 안 된다.
+
+**레이아웃 — 고정 픽셀 금지**
+- 레이아웃 치수에 하드코딩 width/height 쓰지 마라. 화면폭·높이·키보드 높이는 **`MediaQuery`(size·viewInsets·padding)**, **`LayoutBuilder`**, 비율(`Expanded`/`Flexible`/%)로 기기에 맞춘다. (단, `AppSpacing`/`AppRadius` 같은 디자인 토큰 상수는 예외 — 일관 간격/모서리는 고정이 맞다.)
+- 노치·상태바·홈인디케이터 영역은 **`SafeArea`** 로 보호.
+
+**오버플로우 방지 — RenderFlex 노란 줄무늬 0**
+- 세로로 길어질 수 있는 화면·작은 기기는 **`SingleChildScrollView`** 로 감싼다. 가운데 정렬이 필요하면 `LayoutBuilder` + `ConstrainedBox(minHeight: constraints.maxHeight)` 패턴.
+- `Row` 안 요소는 **`Expanded`/`Flexible`** 로 폭을 흡수시켜 가로 넘침 방지.
+- 동적 텍스트(이름·제목 등)는 **`maxLines` + `TextOverflow.ellipsis`**.
+- 고정폭 안에 큰 글꼴(textScale)로 넘칠 수 있는 텍스트는 **`FittedBox(fit: BoxFit.scaleDown)`** 로 감싸 어떤 배율에서도 안 넘치게.
+
+**키보드 — 마지막 콘텐츠 가림 방지**
+- 입력창이 있는 화면은 키보드가 올라올 때 마지막 콘텐츠가 가려지지 않게 한다. 채팅류는 **`WidgetsBindingObserver.didChangeMetrics`** 로 인셋 변화를 감지해 하단 자동 스크롤. **키보드 높이는 고정값이 아니라 `MediaQuery.viewInsets.bottom` 기준.**
+
 ## 명명 규칙
 
 | 대상 | 규칙 | 예 |

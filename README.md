@@ -11,7 +11,7 @@ skill-sets/
 │   ├── setup/               ★ 질문 기반 조합 셋업 (create-react-app CLI처럼)
 │   │
 │   ├── common/              항상 복사 (진짜 스택 중립)
-│   │   └── workflow/        plan·design·develop·test·iterate 스킬 + agents 7(+pm-orchestrator) + .tasks 템플릿
+│   │   └── workflow/        plan·design·develop·test·iterate 스킬 + agents 8(+pm-orchestrator·acceptance-tester) + .tasks 템플릿
 │   │
 │   ├── stacks/              언어·프레임 종속 — 질문으로 1~2개 선택
 │   │   ├── flutter-app/         Flutter 앱 컨벤션 (Riverpod·자체 디자인토큰)
@@ -66,6 +66,8 @@ skill-sets/
 
 **멀티파트 기능**(백+프론트+DB+검증이 한 턴에 얽힘)은 `pm-orchestrator` 에이전트가 지휘자로 붙는다 — 작업을 쪼개 역할 에이전트에 정밀 스펙으로 위임하고, **보고를 믿지 않고 conventions의 `## 검증` 게이트·런타임 E2E를 PM이 직접 재실행**한 뒤 `.tasks/in-progress.md`에 기록한다. 순차 조정이 기본, 대규모 독립 작업만 병렬 승격.
 
+> **검증은 두 축, 구현자와 분리**(self-review 편향 차단): `code-reviewer`(기술 — 규칙·정확성·보안) + `acceptance-tester`(목표 — 가상 사용자가 목표 워크플로 end-to-end 충족 여부 워크스루). 코드는 멀쩡한데 *목표 미달*인 구멍(화면 전이 끊김·딥링크 부재 등)은 후자에서만 잡힌다. PM이 둘을 종합 → 수정 지시 → 재검증.
+
 ## 업데이트 루프 (살아있는 문서)
 
 복사본이 3개라 **자동 동기화는 없다.** 항상 ①을 원본으로 삼고 도구로 흐름을 닫는다.
@@ -88,7 +90,8 @@ skill-sets/
 
 - **판단 기준 > 코드 덩어리.** 통짜 코드는 `api-client`·`supabase-auth`의 보일러플레이트 1개 수준만.
 - **작게 쪼개 조합.** 스택 디테일은 `stacks/*`에, 횡단 관심사는 `crosscutting/*`에, 진짜 공통은 `common/`에.
-- **살아있는 문서.** Claude가 매번 틀리는 지점을 발견하면 해당 모듈에 한 줄씩 추가한다.
+- **살아있는 문서 (래칫).** 막연한 베스트프랙티스는 넣지 않는다. **모든 규칙 한 줄은 *실제로 터진 실패*에 추적 가능**해야 한다 — 버그가 한 번 돌아오면 그걸 막는 규칙이 모듈에 박힌다(예: py-fastapi의 bcrypt 72바이트 `ValueError`). "있으면 좋을 것 같아서"는 금지.
+- **매뉴얼 말고 맵.** 각 모듈은 **짧게**(판단 기준 + 포인터). 1000페이지 매뉴얼이 되면 Claude도 안 읽는다. 길어지면 디테일은 코드·외부 문서로 오프로드하고 모듈엔 "어디를 보라"만 남긴다.
 - **공용 마스터 불변.** 색·프로젝트별 값은 복사된 사본에서만 바꾼다.
 
 ## 사용 방법

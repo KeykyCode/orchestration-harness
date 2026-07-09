@@ -1,4 +1,6 @@
 
-# 조직 스킬 업로드용 빌드 산출물 (zip은 필요할 때 재생성)
-dist/project-setup/assets/
-dist/*.zip
+# 조직 스킬 업로드용 빌드 산출물 (필요할 때 재생성)
+dist/
+
+# macOS
+.DS_Store

@@ -11,7 +11,7 @@ skill-sets/
 │   ├── setup/               ★ 질문 기반 조합 셋업 (create-react-app CLI처럼)
 │   │
 │   ├── common/              항상 복사 (진짜 스택 중립)
-│   │   └── workflow/        plan·design·develop·test·iterate 스킬 + agents 8(+pm-orchestrator·acceptance-tester) + .tasks 템플릿
+│   │   └── workflow/        plan·design·develop·test·iterate·document-work 스킬 + agents 8(+pm-orchestrator·acceptance-tester) + .tasks 템플릿
 │   │
 │   ├── stacks/              언어·프레임 종속 — 질문으로 1~2개 선택
 │   │   ├── flutter-app/         Flutter 앱 컨벤션 (Riverpod·자체 디자인토큰)
@@ -58,6 +58,7 @@ skill-sets/
 /develop-task "[태그]" → 코드 (conventions 규칙대로)
 /test "대상"           → 테스트 (웹 Vitest / Flutter flutter_test / FastAPI pytest)
 /iterate               → 진척 분석 + 다음 액션
+/document-work         → 완료 작업 요약을 로컬 Obsidian vault에 정리(개인 지식 허브·vault 없으면 skip)
 ```
 
 > 워크플로우 5스킬은 **스택 중립** — 게이트·테스트 프레임워크·설계 산출물을 현 프로젝트 conventions에서 가져와 스택별로 분기한다(웹/Flutter/FastAPI).
@@ -91,12 +92,12 @@ skill-sets/
 - **매뉴얼 말고 맵.** 각 모듈은 **짧게**(판단 기준 + 포인터). 1000페이지 매뉴얼이 되면 Claude도 안 읽는다. 길어지면 디테일은 코드·외부 문서로 오프로드하고 모듈엔 "어디를 보라"만 남긴다.
 - **공용 마스터 불변.** 색·프로젝트별 값은 복사된 사본에서만 바꾼다.
 
-## 사용 방법
+## 사용 방법 (단일 원천 = 이 vault 실행본)
 
-- 다운받은 skill 경로를 확인 -> /Users/ravi/work_space/skill-sets/v1-skill-setup
-- 프로젝트를 시작하고자 하는 경로 확인 -> /Users/ravi/work_space/ai-make-service/
-- claude code 에 입력 /Users/ravi/work_space/ai-make-service/ 디렉토리에 /Users/ravi/work_space/skill-sets/v1-skill-setup/setup 스킬대로 프로젝트 만들어줘
+> **원천 경로**: `/Users/ravi/Documents/Obsidian Vault/공통-SKILLS/v1-skill-setup` (이 README가 속한 곳).
+> work_space 사본(`/Users/ravi/work_space/skill-sets/v1-skill-setup`)은 **git 백업**일 뿐 — 셋업은 이 vault 실행본을 참조·복사한다.
 
-- 아래처럼 질문이 나오면 정상
-<img width="998" height="869" alt="image" src="https://github.com/user-attachments/assets/2d542dfb-7727-4922-b7d0-07d4d5d4f191" />
+- 프로젝트를 시작할 경로 확인 (예: `/Users/ravi/work_space/ai-make-service/`)
+- Claude Code에 입력: **"`<프로젝트 경로>` 에 vault `공통-SKILLS/v1-skill-setup/setup` 스킬대로 프로젝트 만들어줘"**
+- 질문 트리(앱/웹 → 백엔드 → 프론트 → 컬러 → 경로)가 나오면 정상.
 

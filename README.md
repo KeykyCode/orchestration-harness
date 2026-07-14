@@ -1,103 +1,111 @@
-# skill-sets — 재사용 스킬 모듈
+# orchestration-harness — 조합형 에이전트 오케스트레이션 하네스
 
-**판단 기준 + 컨벤션**을 자산화한 모듈 모음. boilerplate가 아니라 *"이 스택에선 이렇게 한다 / 언제 무엇을 쓴다"*를 담는다.
-새 프로젝트는 **`setup` 스킬이 질문으로 필요한 모듈을 조합**해 깔아준다.
+> 팀 공통 **Claude Code 스킬셋**. 새 프로젝트를 조립하고(setup), 기존 프로젝트에 붙이며(adopt),
+> 그 위에서 **PM 지휘자 + 역할 에이전트**가 기획→설계→구현→검증을 굴린다.
+> boilerplate가 아니라 *"이 스택에선 이렇게 한다 / 언제 무엇을 쓴다"*는 **판단 기준**을 자산화한다.
 
-## 구조
+두 얼굴을 가진다:
+1. **조합기(부트스트래퍼)** — `setup`/`adopt`가 필요한 모듈만 프로젝트 `.claude/`로 조합.
+2. **오케스트레이션 하네스** — `pm-orchestrator`가 역할 에이전트를 부려 위임·검증·통합.
 
+---
+
+## 🚀 빠른 시작 (팀원용)
+
+### 1) 스킬셋 받기
+```bash
+git clone https://github.com/KeykyCode/orchestration-harness.git
 ```
-skill-sets/
-├── v1-skill-setup/          ★ 모듈+조합 자산 (이 README가 속한 루트)
-│   ├── setup/               ★ 질문 기반 조합 셋업 (create-react-app CLI처럼)
-│   │
-│   ├── common/              항상 복사 (진짜 스택 중립)
-│   │   └── workflow/        plan·design·develop·test·iterate·document-work 스킬 + agents 8(+pm-orchestrator·acceptance-tester) + .tasks 템플릿
-│   │
-│   ├── stacks/              언어·프레임 종속 — 질문으로 1~2개 선택
-│   │   ├── flutter-app/         Flutter 앱 컨벤션 (Riverpod·자체 디자인토큰)
-│   │   ├── py-fastapi/          Python FastAPI 백엔드 (routers·services·repos)
-│   │   ├── ts-next/             Next App Router 컨벤션
-│   │   └── ts-vite-react/       Vite+React SPA 컨벤션
-│   │
-│   └── crosscutting/        스택 중립 횡단 — 0~N개 얹음
-│       ├── design-system/      DESIGN.md+tokens.md (웹 프론트 한정)
-│       ├── supabase-auth/      서버사이드 인증·RLS 원칙
-│       ├── tanstack-query/     서버상태(쿼리키·useQuery/Mutation)
-│       └── api-client/         fetch 래퍼(인증·에러·401)
-│
-└── react-common-skills/     (레거시 보존)
+받은 경로가 `$SRC`(스킬셋 루트)다. 슬래시 명령을 외울 필요 없이 **Claude Code에 자연어로** 말하면 된다.
+
+### 2) 새 프로젝트 만들기 → `setup`
+> Claude Code에 입력:
+> **"`<새 프로젝트 경로>`에 `<클론경로>/setup` 스킬대로 프로젝트 만들어줘"**
+
+질문 트리(앱/웹 → 백엔드 → 프론트 → 컬러 → AI/LLM → 경로)에 답하면, 필요한 모듈을 `.claude/`로 조합하고 스캐폴딩(create-*, flutter create)까지 해준다.
+
+### 3) 기존(진행 중) 프로젝트에 붙이기 → `adopt`
+> Claude Code에 입력:
+> **"이 프로젝트에 `<클론경로>/adopt` 스킬대로 워크플로 붙여줘"**
+
+스택을 **자동 감지**하고, 워크플로를 **비파괴(`cp -n`)로 부착**하며, conventions는 **기존 코드·CLAUDE.md에서 추출**해 생성한다. `CLAUDE.md`·기존 파일은 절대 안 건드린다. 스캐폴딩 없음.
+
+### 4) 부착 후 개발 루프
+프로젝트 `.claude/`에 스킬·에이전트가 깔리면, 이후엔 슬래시/자연어 둘 다 된다:
 ```
-
-## 새 프로젝트 시작 = `setup` 스킬
-
-```
-/setup
-  → Q1. 앱 / 웹?
-  → (앱)  Q2. Flutter  → Q3. 백엔드? (Supabase / Python / 없음)
-  → (웹)  Q2. 풀스택 / 클라이언트만
-            ├ 풀스택      → Q3. 백엔드?(Supabase / Python) → Q4. 프론트?(Next / Vite)
-            └ 클라이언트만 → Q3. 프론트 스택?(Vite / Next)
-  → Q5. 컬러 시드 (#7c6bff …)   ※ 웹 프론트일 때만
-  → Q6. 경로/이름?
-  → common + 선택 stacks/crosscutting 을 프로젝트 .claude/ 로 복사 + 컬러 적용 + 초기 셋업
-```
-
-**조합 예시 (common 항상 + ↓)**
-| 제품 | stacks | crosscutting |
-|---|---|---|
-| SEO + Supabase (예: Proofly) | `ts-next` | `supabase-auth` (+ `tanstack-query`) |
-| 로그인 뒤 SPA 툴 | `ts-vite-react` | `api-client` + `tanstack-query` + `design-system` |
-| Flutter 앱 + Supabase | `flutter-app` | `supabase-auth` |
-| Flutter 앱 + 자체 백엔드 | `flutter-app` + `py-fastapi` | `api-client` |
-
-## 워크플로우 (프로젝트에 복사된 뒤)
-
-```
-/plan-features "기능"  → backlog
-/design-ui "화면"      → .tasks/design/  (UI 스택=와이어프레임·위젯트리 / FastAPI=엔드포인트·스키마 계약)
-/develop-task "[태그]" → 코드 (conventions 규칙대로)
+/plan-features "기능"  → backlog (화면구조·레이어 태스크·우선순위·wave/deps/QA)
+/design-ui "화면"      → .tasks/design/ (UI 와이어프레임·위젯트리 / 백엔드는 API 계약)
+/develop-task "[태그]" → 코드 (conventions 규칙대로 + 실제 표면 증거 확인)
 /test "대상"           → 테스트 (웹 Vitest / Flutter flutter_test / FastAPI pytest)
-/iterate               → 진척 분석 + 다음 액션
-/document-work         → 완료 작업 요약을 로컬 Obsidian vault에 정리(개인 지식 허브·vault 없으면 skip)
+/iterate               → 진척 스냅샷 + 다음 1수
+/document-work         → 완료 요약을 로컬 Obsidian vault에 정리 (vault 없으면 skip)
 ```
+**멀티파트 기능**(백+프론트+DB+AI+검증이 얽힘)은 *"PM처럼 조율해줘"* 라고 하면 `pm-orchestrator`가 지휘자로 붙는다.
 
-> 워크플로우 5스킬은 **스택 중립** — 게이트·테스트 프레임워크·설계 산출물을 현 프로젝트 conventions에서 가져와 스택별로 분기한다(웹/Flutter/FastAPI).
+---
 
-에이전트(`developer`·`ui-designer` 등)는 자연어 요청 시 자동 위임.
-
-**멀티파트 기능**(백+프론트+DB+검증이 한 턴에 얽힘)은 `pm-orchestrator` 에이전트가 지휘자로 붙는다 — 작업을 쪼개 역할 에이전트에 정밀 스펙으로 위임하고, **보고를 믿지 않고 conventions의 `## 검증` 게이트·런타임 E2E를 PM이 직접 재실행**한 뒤 `.tasks/in-progress.md`에 기록한다. 순차 조정이 기본, 대규모 독립 작업만 병렬 승격.
-
-> **검증은 두 축, 구현자와 분리**(self-review 편향 차단): `code-reviewer`(기술 — 규칙·정확성·보안) + `acceptance-tester`(목표 — 가상 사용자가 목표 워크플로 end-to-end 충족 여부 워크스루). 코드는 멀쩡한데 *목표 미달*인 구멍(화면 전이 끊김·딥링크 부재 등)은 후자에서만 잡힌다. PM이 둘을 종합 → 수정 지시 → 재검증.
-
-## 업데이트 루프 (살아있는 문서)
-
-복사본이 3개라 **자동 동기화는 없다.** ①(이 레포)이 항상 원본. 별도 스크립트 없이 **Claude에게 말로 시켜** 흐름을 닫는다.
+## 📁 구조
 
 ```
-① 이 레포 ──(zip 재생성)──▶ ② 조직 스킬(웹 챗) ──setup──▶ ③ 프로젝트 .claude/ 사본
+orchestration-harness/          (= $SRC, 이 README의 루트)
+├── setup/          ★ 새 프로젝트 조합·스캐폴딩 (질문 기반)
+├── adopt/          ★ 기존 프로젝트에 비파괴 부착 (감지 기반)
+│
+├── common/workflow/   항상 복사 (스택 중립)
+│   ├── skills: plan-features · design-ui · develop-task · test · iterate · document-work
+│   ├── agents: 10개 (아래 로스터)
+│   └── .tasks/     backlog · in-progress · done · iterate-log · product-goal 템플릿
+│
+├── stacks/         언어·프레임 종속 — 질문/감지로 1~2개
+│   ├── flutter-app/     Flutter (Riverpod·자체 디자인토큰)
+│   ├── py-fastapi/      FastAPI (routers·services·repos)
+│   ├── ts-next/         Next App Router
+│   └── ts-vite-react/   Vite+React SPA
+│
+└── crosscutting/   스택 중립 횡단 — 0~N개 (감지/선택)
+    ├── design-system/   DESIGN.md+tokens.md (웹 프론트)
+    ├── supabase-auth/   서버사이드 인증·RLS
+    ├── tanstack-query/  서버상태(쿼리키·useQuery/Mutation)
+    ├── api-client/      fetch 래퍼(인증·에러·401)
+    └── ai-llm/          RAG·프롬프트·에이전트그래프·eval + ai-engineer 에이전트 (opt-in)
 ```
 
-- **보강할 게 생기면** → Claude에게 *"○○ 스킬에 이거 추가해줘"* → **레포(①)를 고치고 커밋**. (프로젝트 사본 말고 원본을 고친다)
-- **조직(웹 챗)에 반영** → Claude에게 *"조직 zip 다시 만들어줘"* → `dist/project-setup.zip` 재생성 → 조직 스킬에 **재업로드**.
-- **Code에서 쓰기** → `~/.claude/skills/`(개인) 또는 프로젝트 `.claude/skills/`. **조직 웹 업로드는 Code에 자동 반영 안 됨** (웹 챗 전용).
-- **기존 프로젝트 사본**은 옛 버전 그대로 — 갱신하려면 Claude에게 *"이 프로젝트 .claude를 최신 레포로 갱신해줘"*.
+## 🎭 에이전트 로스터
 
-> 규율(래칫): "있으면 좋을 것 같아서"가 아니라 **실제로 터진 실패**가 있을 때만 규칙을 추가한다.
+지휘자 1 + 역할 9 (common, 항상) + AI 1 (opt-in):
 
-## 원칙
+| 에이전트 | 역할 | 단계 |
+|---|---|---|
+| **pm-orchestrator** | 지휘자 — 위임·직접검증·통합. 나머지를 부린다 | 오케스트레이션 |
+| **gap-analyst** | 쪼개기 전 모순·모호·누락제약·위험 read-only 점검 | 기획 앞단 |
+| **feature-planner** | 화면구조·레이어 태스크·우선순위 분해 → backlog | 기획 |
+| **ui-designer** | 와이어프레임·컴포넌트(위젯)트리·상태 설계 | 설계 |
+| **ux-director** | 정보 위계·미학·가시성 총괄, ui-designer 지시·검토 | 설계 총괄 |
+| **developer** | conventions 레이어 규칙대로 구현 (스택 중립) | 구현 |
+| **tester** | 단위·컴포넌트·시나리오 테스트 작성·실행 | 테스트 |
+| **code-reviewer** | 규칙·아키텍처·보안 독립 검증 (기술 축) | 검증 |
+| **acceptance-tester** | 가상 사용자 — 목표 워크플로 end-to-end 충족 검증 (목표 축) | 검증 |
+| **iterator** | 상태 스냅샷 + 다음 1수 추천 | 진척 |
+| **ai-engineer** *(opt-in)* | RAG·프롬프트·에이전트그래프·eval (ai-llm 모듈) | AI |
 
-- **판단 기준 > 코드 덩어리.** 통짜 코드는 `api-client`·`supabase-auth`의 보일러플레이트 1개 수준만.
-- **작게 쪼개 조합.** 스택 디테일은 `stacks/*`에, 횡단 관심사는 `crosscutting/*`에, 진짜 공통은 `common/`에.
-- **살아있는 문서 (래칫).** 막연한 베스트프랙티스는 넣지 않는다. **모든 규칙 한 줄은 *실제로 터진 실패*에 추적 가능**해야 한다 — 버그가 한 번 돌아오면 그걸 막는 규칙이 모듈에 박힌다(예: py-fastapi의 bcrypt 72바이트 `ValueError`). "있으면 좋을 것 같아서"는 금지.
-- **매뉴얼 말고 맵.** 각 모듈은 **짧게**(판단 기준 + 포인터). 1000페이지 매뉴얼이 되면 Claude도 안 읽는다. 길어지면 디테일은 코드·외부 문서로 오프로드하고 모듈엔 "어디를 보라"만 남긴다.
-- **공용 마스터 불변.** 색·프로젝트별 값은 복사된 사본에서만 바꾼다.
+## 🧱 핵심 원칙 (왜 이렇게 설계했나)
 
-## 사용 방법 (단일 원천 = 이 vault 실행본)
+- **SSOT · 규칙 포인터** — 규칙을 여러 곳에 복제하지 않는다. agent는 얇은 페르소나(누가/무엇을/왜), 절차는 skill이 SSOT, 스택 규칙·검증 명령·태그는 conventions가 SSOT. 각자 원천을 **가리키기만** 한다.
+- **검증 2축, 구현자와 분리** — `code-reviewer`(기술: 규칙·정확성·보안) + `acceptance-tester`(목표: 가상 사용자 워크스루). self-review 편향 차단. *코드는 멀쩡한데 목표 미달*인 구멍은 후자에서만 잡힌다.
+- **정적 게이트 통과 ≠ 완료** — 빌드/타입/테스트만으로 완료 금지. 실제 표면(브라우저·HTTP·CLI)에서 관찰가능 결과를 확인한다.
+- **위임은 PM 경유** — 에이전트가 다른 에이전트를 직접 부르지 않는다(Claude Code 서브에이전트 1레벨 제약). 하위는 "다음 단계"를 PM에 반환.
+- **살아있는 문서 (래칫)** — 막연한 베스트프랙티스 금지. 규칙 한 줄은 **실제로 터진 실패**에 추적 가능해야 한다. "있으면 좋을 것 같아서"는 넣지 않는다.
+- **매뉴얼 말고 맵** — 각 모듈은 짧게(판단 기준 + 포인터). 길어지면 디테일은 코드·conventions로 오프로드.
+- **공용 마스터 불변** — 색·프로젝트별 값은 복사된 사본에서만 바꾼다.
 
-> **원천 경로**: `/Users/ravi/Documents/Obsidian Vault/공통-SKILLS/v1-skill-setup` (이 README가 속한 곳).
-> work_space 사본(`/Users/ravi/work_space/skill-sets/v1-skill-setup`)은 **git 백업**일 뿐 — 셋업은 이 vault 실행본을 참조·복사한다.
+---
 
-- 프로젝트를 시작할 경로 확인 (예: `/Users/ravi/work_space/ai-make-service/`)
-- Claude Code에 입력: **"`<프로젝트 경로>` 에 vault `공통-SKILLS/v1-skill-setup/setup` 스킬대로 프로젝트 만들어줘"**
-- 질문 트리(앱/웹 → 백엔드 → 프론트 → 컬러 → 경로)가 나오면 정상.
+## 🔧 유지보수자 전용 (원본 관리)
 
+> 팀원은 여기 안 봐도 된다. 원본을 고치는 사람만.
+
+- **원본(실행 원천)** = Obsidian vault 실행본 `…/공통-SKILLS/v1-skill-setup`. 편집·커밋은 여기서.
+- **remote 2곳**: `origin`(`stpark89/v1-skill-setup`, 개인 백업) + `keykycode`(`KeykyCode/orchestration-harness`, 팀 공유). 커밋 후 `git push origin main && git push keykycode main`.
+- **work_space 사본**(`~/work_space/skill-sets/v1-skill-setup`)은 git 백업 — 원본 push 후 `git pull`로 현행화.
+- **모듈 추가 규율(래칫)**: "있으면 좋을 것 같아서" 금지 — 실제 실패가 있을 때만 규칙을 박는다.
+- 프로젝트에 이미 깔린 사본은 옛 버전 그대로. 갱신하려면 Claude에게 *"이 프로젝트 .claude를 최신 스킬셋으로 갱신해줘"*.

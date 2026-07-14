@@ -36,7 +36,8 @@ Q1. 앱 / 웹?
             └─ Q3. 프론트 스택?  →  [Vite / Next]
 └─ (마지막 공통)
     Q5. 컬러 시드?  →  [HEX 예: #7c6bff / 기본(중립)]   ※ 웹 프론트일 때만
-    Q6. 프로젝트 경로/이름?
+    Q6. AI/LLM 기능?  →  [있음(RAG·에이전트·프롬프트) / 없음]   → 있으면 `ai-llm` 얹기
+    Q7. 프로젝트 경로/이름?
 ```
 
 **선택 판단 기준(물을 때 안내):**
@@ -44,11 +45,14 @@ Q1. 앱 / 웹?
 - Q3(백엔드): 인증·DB·스토리지가 표준 수준, 빠른 출시 → **Supabase**. 무거운 커스텀 서버 로직·직접 제어 → **Python(FastAPI)**. (Java·Go는 아직 모듈 없음 — 생기면 여기 추가.)
 - Q4(풀스택 프론트): SEO/공개 콘텐츠 중요 → **Next**. SEO 무관한 내부 툴 → **Vite**. 애매하면 Next.
 - Q3(클라이언트만 프론트): 대부분 **Vite**. SEO 필요하면 애초에 풀스택/Next 검토.
+- Q6(AI/LLM): RAG·프롬프트·LLM 에이전트/그래프·eval이 프로젝트의 실질 관심사면 **있음** → `ai-llm`(프레임워크 중립 skill + `ai-engineer` 에이전트) 추가. 단순히 API 한 번 호출하는 정도면 **없음**.
 
 ## 2. 모듈 매핑 (선택 → 복사 대상)
 
-**항상(common):** `common/workflow`(스킬 6 + agents 7, pm-orchestrator 포함) + `common/workflow/.tasks`
-> `document-work`(6번째)는 스택 무관 — 작업 마무리 시 사용자 Obsidian vault에 요약 정리(vault 없으면 무해하게 skip).
+**항상(common):** `common/workflow`(스킬 6 + agents 10, pm-orchestrator 포함) + `common/workflow/.tasks`
+> `document-work`(6번째 스킬)는 스택 무관 — 작업 마무리 시 사용자 Obsidian vault에 요약 정리(vault 없으면 무해하게 skip).
+
+**AI/LLM 있음(Q6):** crosscutting에 `ai-llm` 추가 — 프레임워크 중립 skill + `ai-engineer` 에이전트(RAG·프롬프트·에이전트그래프·eval 전담, 스택 중립 `developer`가 못 잡는 관심사). 스택·백엔드 선택과 직교(어떤 조합에도 얹을 수 있음).
 
 | 선택 조합 | stacks | crosscutting |
 |---|---|---|
@@ -70,7 +74,7 @@ Q1. 앱 / 웹?
 
 ```bash
 SRC="/Users/ravi/Documents/Obsidian Vault/공통-SKILLS/v1-skill-setup"   # 단일 원천(vault 실행본)
-DEST=<Q6 경로>
+DEST=<Q7 경로>
 mkdir -p "$DEST/.claude/skills" "$DEST/.claude/agents"
 # 공통(항상)
 cp -r "$SRC"/common/workflow/{plan-features,design-ui,develop-task,test,iterate,document-work} "$DEST/.claude/skills/"
@@ -78,9 +82,16 @@ cp "$SRC"/common/workflow/agents/*.md "$DEST/.claude/agents/"
 cp -r "$SRC"/common/workflow/.tasks "$DEST/"
 # 선택 stacks (매핑대로 1~2개)
 cp -r "$SRC"/stacks/<선택스택> "$DEST/.claude/skills/"
-# 선택 crosscutting (매핑대로 0~N개)
-cp -r "$SRC"/crosscutting/<선택횡단> "$DEST/.claude/skills/"
+# 선택 crosscutting (매핑대로 0~N개) — skill은 skills/로, 모듈에 agents/가 있으면 그 md는 agents/로 분리
+for m in <선택횡단들>; do
+  cp -r "$SRC"/crosscutting/"$m" "$DEST/.claude/skills/"
+  if [ -d "$SRC"/crosscutting/"$m"/agents ]; then
+    cp "$SRC"/crosscutting/"$m"/agents/*.md "$DEST/.claude/agents/"
+    rm -rf "$DEST/.claude/skills/$m/agents"   # 스킬 폴더 안 agents 하위는 제거(중복 방지)
+  fi
+done
 ```
+> `ai-llm`을 선택하면 위 루프가 `ai-engineer` 에이전트를 `.claude/agents/`로, `ai-llm` skill을 `.claude/skills/`로 자동 분리한다.
 
 ## 4. 컬러톤 적용 (웹 프론트 한정)
 `design-system`을 복사한 경우에만: 복사된 `$DEST/.claude/skills/design-system/tokens.md`에 **Q5 시드**를 적용(그 색으로 `--color-blue-*`/`--color-violet-*` OKLCH 스케일 생성). 기본이면 중립 유지.

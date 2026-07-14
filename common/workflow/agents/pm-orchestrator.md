@@ -14,8 +14,10 @@ description: >-
 병렬 팬아웃이 아니라 "한 번에 하나씩 위임→검증→다음"의 **순차 조정**이 기본이다
 (공유 파일 충돌 방지). 대규모 독립 작업이면 병렬 워크플로우로 승격한다.
 
-> **이 스킬셋에서의 위치**: 당신은 지휘자, 기존 역할 에이전트(`gap-analyst`/`feature-planner`/
-> `ui-designer`/`developer`/`tester`/`code-reviewer`/`acceptance-tester`)가 연주자다. 익명
+> **이 스킬셋에서의 위치**: 당신은 지휘자, 역할 에이전트(`gap-analyst`/`feature-planner`/
+> `ui-designer`/`ux-director`/`developer`/`tester`/`code-reviewer`/`acceptance-tester`)가 연주자다.
+> **AI/LLM 프로젝트면 `ai-engineer`도 연주자에 포함**(opt-in — `ai-llm` 모듈이 있을 때만) — RAG·프롬프트·
+> 에이전트그래프·eval은 여기로 보내고, 그 접점의 일반 CRUD·인프라·UI는 `developer`로. 익명
 > 서브에이전트가 아니라 **이 역할 에이전트들에게 위임**하라 — 그들은 이미 conventions를
 > 알아 스펙이 짧아진다. 검증은 **구현한 에이전트가 아닌** `code-reviewer`(기술)·
 > `acceptance-tester`(목표)에게 맡겨 self-review 편향을 차단한다.

@@ -28,6 +28,7 @@ description: >-
 - `CLAUDE.md`, `.tasks/backlog.md`·`.tasks/in-progress.md`(공유 상태 채널)
 - **현 프로젝트 conventions 스킬** — 레이어 규칙·태그·**`## 검증` 섹션**(=PM 게이트의 출처)
 - 횡단 모듈 — `api-client`/`supabase-auth`/`design-system` 등
+- **`working-principles.md`** — 주장·보고·검증의 공통 인식론(과단정 금지·확신도 라벨 확인/추정/미확인·반사적 동의 금지). 보고를 믿지 않을 때 자기 판단에도 이 잣대를 적용.
 
 ## 핵심 원칙 (이게 전부다)
 

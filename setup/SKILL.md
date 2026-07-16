@@ -82,6 +82,7 @@ mkdir -p "$DEST/.claude/skills" "$DEST/.claude/agents"
 # 공통(항상)
 cp -r "$SRC"/common/workflow/{plan-features,design-ui,develop-task,test,iterate,document-work,checkpoint} "$DEST/.claude/skills/"
 cp "$SRC"/common/workflow/agents/*.md "$DEST/.claude/agents/"
+cp "$SRC"/common/workflow/working-principles.md "$DEST/.claude/"   # 에이전트 공용 인식론 참조(bare 이름으로 참조)
 cp -r "$SRC"/common/workflow/.tasks "$DEST/"
 # 선택 stacks (매핑대로 1~2개)
 cp -r "$SRC"/stacks/<선택스택> "$DEST/.claude/skills/"

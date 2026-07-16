@@ -28,6 +28,7 @@ mkdir -p "$DEST/.claude/skills" "$DEST/.claude/agents"
 # workflow는 스택 중립 → 항상 안전하게 부착 (-n: 기존 파일 건드리지 않음)
 cp -rn "$SRC"/common/workflow/{plan-features,design-ui,develop-task,test,iterate,document-work,checkpoint} "$DEST/.claude/skills/"
 cp -n  "$SRC"/common/workflow/agents/*.md "$DEST/.claude/agents/"
+cp -n  "$SRC"/common/workflow/working-principles.md "$DEST/.claude/" 2>/dev/null || true   # 에이전트 공용 인식론 참조
 cp -rn "$SRC"/common/workflow/.tasks "$DEST/" 2>/dev/null || true
 # 감지된 crosscutting만 (모듈에 agents/ 있으면 .claude/agents/로 분리)
 for m in <감지된 crosscutting들>; do

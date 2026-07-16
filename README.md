@@ -30,6 +30,8 @@ git clone https://github.com/KeykyCode/orchestration-harness.git
 
 스택을 **자동 감지**하고, 워크플로를 **비파괴(`cp -n`)로 부착**하며, conventions는 **기존 코드·CLAUDE.md에서 추출**해 생성한다. `CLAUDE.md`·기존 파일은 절대 안 건드린다. 스캐폴딩 없음.
 
+> 이미 도입한 프로젝트를 **최신 스킬셋으로 갱신**하려면 → `update` 스킬(*"이 프로젝트 스킬 최신으로 갱신해줘"*). harness 관리분만 덮어쓰고 conventions·상태·색은 보존.
+
 ### 4) 부착 후 개발 루프
 프로젝트 `.claude/`에 스킬·에이전트가 깔리면, 이후엔 슬래시/자연어 둘 다 된다:
 ```
@@ -110,4 +112,4 @@ orchestration-harness/          (= $SRC, 이 README의 루트)
 - **remote 2곳**: `origin`(`stpark89/v1-skill-setup`, 개인 백업) + `keykycode`(`KeykyCode/orchestration-harness`, 팀 공유). 커밋 후 `git push origin main && git push keykycode main`.
 - **work_space 사본**(`~/work_space/skill-sets/v1-skill-setup`)은 git 백업 — 원본 push 후 `git pull`로 현행화.
 - **모듈 추가 규율(래칫)**: "있으면 좋을 것 같아서" 금지 — 실제 실패가 있을 때만 규칙을 박는다.
-- 프로젝트에 이미 깔린 사본은 옛 버전 그대로. 갱신하려면 Claude에게 *"이 프로젝트 .claude를 최신 스킬셋으로 갱신해줘"*.
+- 프로젝트에 이미 깔린 사본은 옛 버전 그대로 동결. 갱신은 **`update` 스킬**(harness 관리분만 덮어쓰고 conventions·상태·색은 보존): *"이 프로젝트 스킬 최신으로 갱신해줘"*. (`adopt`는 `cp -n`이라 갱신 안 됨.)

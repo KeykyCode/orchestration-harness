@@ -52,9 +52,9 @@ orchestration-harness/          (= $SRC, 이 README의 루트)
 ├── adopt/          ★ 기존 프로젝트에 비파괴 부착 (감지 기반)
 │
 ├── common/workflow/   항상 복사 (스택 중립)
-│   ├── skills: plan-features · design-ui · develop-task · test · iterate · document-work
+│   ├── skills: plan-features · design-ui · develop-task · test · iterate · document-work · checkpoint
 │   ├── agents: 10개 (아래 로스터)
-│   └── .tasks/     backlog · in-progress · done · iterate-log · product-goal 템플릿
+│   └── .tasks/     backlog · in-progress · done · iterate-log · product-goal · resume 템플릿
 │
 ├── stacks/         언어·프레임 종속 — 질문/감지로 1~2개
 │   ├── flutter-app/     Flutter (Riverpod·자체 디자인토큰)
@@ -97,6 +97,7 @@ orchestration-harness/          (= $SRC, 이 README의 루트)
 - **살아있는 문서 (래칫)** — 막연한 베스트프랙티스 금지. 규칙 한 줄은 **실제로 터진 실패**에 추적 가능해야 한다. "있으면 좋을 것 같아서"는 넣지 않는다.
 - **매뉴얼 말고 맵** — 각 모듈은 짧게(판단 기준 + 포인터). 길어지면 디테일은 코드·conventions로 오프로드.
 - **공용 마스터 불변** — 색·프로젝트별 값은 복사된 사본에서만 바꾼다.
+- **컨텍스트 수명 (리셋 & 재하이드레이션)** — 상태는 `.tasks/resume.md`로 외재화, 세션은 짧게. 청크 끝에 `checkpoint` → 판단이 흐려지면 `/clear` → resume.md만 읽고 재시작. 위임(오염 방지)·외재화(소실 방지)에 더해 라이브 컨텍스트 자체를 관리하는 축. (실패 추적: 장기 세션에서 상태를 파일에 적어도 PM 답변 품질 저하 → 원인은 소실이 아니라 라이브 컨텍스트 오염.)
 - **자기 주장에도 회의 (캘리브레이션·반아첨)** — 과단정 금지·확신도 라벨(확인/추정/미확인)·검증 경계 명시·반사적 동의 금지. "검증 2축"의 개인판(남 코드뿐 아니라 내 주장에도 회의). 상세는 `common/workflow/working-principles.md`, agent들은 포인터로 참조. (실패 추적: "코드소비0→제거안전" 과단정→반박→정정 반복)
 
 ---
